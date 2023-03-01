@@ -39,6 +39,7 @@ public class ClockView extends View {
     private float xCenter, yCenter;
     private double d;
     private double sec, min, hour;
+    Date currentTime;
 
 
     public ClockView(Context context)
@@ -52,7 +53,7 @@ public class ClockView extends View {
 
         Init();
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ClockView);
-        Date currentTime = Calendar.getInstance().getTime();
+        currentTime = Calendar.getInstance().getTime();
         curHours = array.getInteger(R.styleable.ClockView_hour, currentTime.getHours());
         curHours %= 12;
         curMinutes = array.getInteger(R.styleable.ClockView_min, currentTime.getMinutes());
@@ -241,9 +242,17 @@ public class ClockView extends View {
     private void recalculateTime ()
     {
         curSeconds++;
+
+
         if (curSeconds == 60){
             curSeconds = 0;
-            curMinutes += 1;
+            currentTime = Calendar.getInstance().getTime();
+            curHours = currentTime.getHours();
+            curHours %= 12;
+            curMinutes = currentTime.getMinutes();
+            curMinutes %= 60;
+            curSeconds = currentTime.getSeconds();
+            curSeconds %= 60;
             if (curMinutes == 60){
                 curMinutes = 0;
                 curHours += 1;
